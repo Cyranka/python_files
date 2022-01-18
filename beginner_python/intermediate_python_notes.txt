@@ -1,0 +1,159 @@
+'''
+Data visualization
+
+
+When using matplot lib, there are two steps:
+1st) Build the plot plt.plot(arguments) ##Tells how to plot and where the plot (not show)
+2nd) plt.show
+
+When you have a time scale along the horizontal axis, the line plot is your friend. But in many other cases, when you're trying to assess if there's a correlation between two variables, for example, the scatter plot is the better choice
+
+plt.show() displays a plot
+plt.clf() cleans it up again so you can start afresh
+
+
+Customization:
+
+Axis labels
+plt.xlabel("Label title")
+plt.ylabel("Label title")
+plt.title("Plot title")
+plt.ticks([list with ticks values],
+		  [list with the tick names])
+
+'''
+
+'''
+Dictionaries
+
+~Something like a list with names. Very similar to named lists in R
+
+dict_name = {key:value}
+dict_name["key"] ##Subsets by key name
+
+keys should be unique and should be immutable objects
+
+To add a new key-value pair to a dictionary do: dict_name['new key'] = new_value
+To delete a key-value pair do del(dict_name['key name'])
+
+Lists are indexed by a range of numbers, whereas dictionaries are indexed by unique keys
+
+Dictionary values can be subset/modified using dict_name['key_name'] = 'some_modifications'
+'''
+
+'''
+Pandas
+
+Building a data frame from a dictionary: keys(column labels); values(data, column by column) ~Something like tribble
+
+pd.DataFrame(dict_name)
+pd.read_csv("csv_name.csv", index_col = ) ##this arguments tells the index of the row that contains the column names
+
+Dataframe: a way to store tabular data where you can label the rows and the columns
+	
+Index and select data
+
+* Column Access: data_frame['column_name']	-> Select the column 'column_name' from data_frame (Does not return a data frame).
+                 data_frame[['column_name']] -> Selects the column AND keeps the data frame structure
+
+* Row Access: data_frame[initial_index:index_after_last]
+
+*Column access takes strings, while row access takes integers or booleans. Needs to be done at once
+-------------------------------------------------------------------------------------------------------------------------------
+* loc/iloc: 
+	loc ("label based"): data_frame.loc["label"] ##Same as above. To return a data frame, use double brackets
+
+		- Row/column loc: data_frame[[list_of_row_labels], [list_of_column_labels]]
+
+	iloc(integer position-based): data_frame[[numeric_list_of_row_indices], [numeric_list_of_col_indices]]
+
+*loc/iloc allows you to select both columns and rows
+
+'''
+
+'''
+Comparison operators
+
+
+Operators that tell how two python values relate
+Notice that comparison operators on NumPy arrays 
+
+------------------------------------------------
+Boolean operators
+
+and
+or
+not (simply negates the boolean operator)
+
+numpy arrays: logical_and();logical_or(), logical_not()
+
+ex: np.logical_and(array>, array == )
+
+------------------------------------------------
+Conditional statements
+
+'''
+
+'''
+Filtering Panda Data Frames
+
+Use boolean arrays to filter data frames. For more than one condition use np.logical_()
+
+'''
+
+'''
+While loops
+
+The while loop is like a repeated if statement. The code is executed over and over again, as long as the condition is True.
+
+while condition:
+	expression	
+
+For loops
+for var in seq:
+	expression
+
+enumerate produces the value and the index
+
+Using a for loop to iterate over a list only gives you access to every list element in each run, one after the other.
+If you also want to access the index information, so where the list element you're iterating over is located, you can use enumerate().	
+
+'''
+
+'''
+Looping through data structures
+
+- The basic mechanics of the for loop remains the same, what changes is how you define the sequence
+
+Example 1 (Dictionaries):
+
+for key, value in dict.items():
+	write loop
+
+Example 2 (Numpy array):
+
+If you're dealing with a 2D NumPy array, it's more complicated. A 2D array is built up of multiple 1D arrays. To explicitly iterate over all separate elements of a multi-dimensional array, you'll need this syntax
+
+for val in np.nditer(my_array):
+	print(val)	
+
+Example 3 (Panda Data Frames):
+	
+for row_label,row_values in dataframe.iterrows():
+	print(row_label)
+	print(row_values) ##All values in the row	
+
+apply function (apply the same function over all the values in a column)
+
+brics["name_length"] = bricks["country"].apply(len)
+
+'''
+
+'''
+Generating random numbers: np.random.rand() ##Samples from uniform distribution
+						   np.random.randint(initial_integer,integer_after_the_last)
+
+
+Distributions
+
+'''

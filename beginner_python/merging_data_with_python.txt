@@ -1,0 +1,159 @@
+'''
+Inner join: only returns rows that match in both tables
+
+merged_df = df_1.merge(df_2, on = 'var_to_merge')
+
+merged_df = df_1.merge(df_2, on = 'var_to_merge',
+suffixes = ('suffix_for_df_1','suffix_for_df_2'))
+
+Remember that .merge() only returns rows where the values match in both tables.
+
+
+'''
+
+'''
+One-to-many relationships
+
+1-to-1: Every row in the left table is related to only one row in the right table
+1-to-many: Every row in the left table is related to one or more rows in the right table
+
+'''
+
+'''
+Merging multiple data frames
+
+merged_df = df_1.merge(df_2, on = ['var_to_merge_1','var_to_merge_2']) ##Merging on multiple columns
+
+You can chain multiple merge statements
+
+'''
+
+'''
+Left-Join
+
+merged_df = df_1.merge(df_2, on = 'var_to_merge', how = 'left')
+
+
+Right-Join: mirror oposite of the left join
+
+merged_df = df_1.merge(df_2,how = 'right', left_on = 'var_1', right_on = 'var_2') ##When you have columns with different names
+
+Outer-Join: will return all the rows regardless if there is a match between the two 
+
+'''
+
+'''
+Merging a table to itself
+
+Self-join: all principles still apply
+Situations where you might want to merge a table to itself: 
+    * Hierarchical relationships
+    * Sequential relationships
+    * Graph data (networks)
+    * Merging a table to itself can be useful when you want to compare values in a column to other values in the same column.
+
+'''
+
+'''
+Merging on indices
+
+pd.read_csv("file_name.csv", index_col = ['id']) ##tells which column in the csv should be treated as indices
+
+If the indices to match on different data frames have different names:
+
+df.merge(df_2, left_on = "index_name", left_index = True,right_on = 'df_2_index_name',right_index = True)
+
+'''
+
+'''
+Filtering Joins: filter observations from table based on whether or not they match an observation in another table.
+
+Semi-join: keep rows in left table if they exist on the right table (as matched by id). Filter using  isin()
+
+Anti-join: keep rows in left table if they do NOT exist on the right table (as matched by id)
+
+df.merge(df_2,how = '',indicator = True) ##Indicator will tell you where the entry exists
+
+
+Step-by-step (Semi-join)
+
+1) Merge the left and right tables on key columns using inner join
+2) Search if the column in the left table is in the merged tables using .isin()
+3) Filter rows in the left table
+
+
+'''
+
+
+'''
+Concatenate DataFrames together vertically (bind_rows)
+
+pd.concat([list_of_data_frames_to_concatenate]) ##  
+
+pd.concat([list_of_data_frames_to_concatenate], ignore_index =True) ##will generate indices from 0 to n-1 and drop original
+
+pd.concat([list_of_data_frames_to_concatenate], ignore_index =True,keys =[list_of_names]) ##This will create a hierarchical list of indices
+
+pd.concat([list_of_data_frames_to_concatenate],sort = True) ##Sort the columns in alphabetical order
+
+pd.concat([list_of_data_frames_to_concatenate],join = 'inner') ##Only keep the columns that match
+
+'''
+
+'''
+Verifying integrity
+
+.merge(validating = None) ##Doesn't check
+.merge(validating = 'one_to_one')
+.merge(validating = 'one_to_many')
+.merge(validating = 'many_to_one')
+.merge(validating = 'many_to_many')  
+
+##the merge will throw an error if it doesn't pass validations
+
+.concat(verify_integration = False) #Doesn't check
+.concat(verify_integration = False) #Checks if the concatenated indices contain duplicates
+
+
+'''
+
+
+'''
+Interesting code:
+
+licenses_owners.groupby('title').agg({'account':'count'}) ##For the account variable, use the count method
+
+licenses_zip_ward.groupby('alderman').agg({'income':'median'}) ##For the income variable, use median
+
+
+licenses_zip_ward.groupby('alderman').agg({'income': 'median','zip_x':'count'}) ##Using different methods for different columnss
+
+---Interesting use of .loc
+# Merge the ridership, cal, and stations tables
+ridership_cal_stations = ridership.merge(cal, on=['year','month','day']) \
+							.merge(stations, on='station_id')
+
+# Create a filter to filter ridership_cal_stations
+filter_criteria = ((ridership_cal_stations['month'] == 7) 
+                   & (ridership_cal_stations['day_type'] == 'Weekday') 
+                   & (ridership_cal_stations['station_name'] == 'Wilson'))
+
+# Use .loc and the filter to select for rides
+print(ridership_cal_stations.loc[filter_criteria, 'rides'].sum())
+
+---To prevent python from converting grouped variables into indices, use 
+
+df.groupby(['list_of_vars'], as_index = False)
+
+---Using list comprehension to create a categorical variable based on another
+is_recession = ['r' if s=='recession' else 'g' for s in gdp_recession['econ_status']]
+
+---Creating a datetime column
+pd.to_datetime(ur_tall['year'] + '-' + ur_tall['month'])
+
+pulls['date'] = pd.to_datetime(pulls['date'], utc = True) #Return UTC DatetimeIndex if True 
+
+---Using more than one variable in line plot
+dow_bond.plot(y = ['close_dow','close_bond'], x='date', rot=90)
+
+'''

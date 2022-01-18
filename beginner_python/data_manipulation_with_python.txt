@@ -1,0 +1,217 @@
+'''
+Pandas is built on NumPy and Matplotlib
+
+In pandas, tabular data is represented as a Data FRAME
+
+df.head() #Return the first n heads
+df.info() ##Returns informattion about the data frame (column name and number,total nulls, data type)
+df.shape ##Row x columns
+df.describe()  ##Basic summary statistics for numerical columns
+df.values ##Values in a numpy array
+df.columns ##Column names
+df.index ##Row indices
+
+'''
+
+'''
+Changing column types
+df['column'].astype('type_name')
+
+
+df.dtypes ##Series of data types for each column in data frame
+'''
+
+'''
+Sorting and subsetting
+
+df.sort_values("column_name") ##Sort values by columnn name
+df.sort_values(["var_1", "var_2",..., "var_n"]) ##Sort by a list of column names
+df.sort_values(["var_1", "var_2",..., "var_n"], ascending =[True, False, ..., True]) ##Sort by a list of column names
+df[["col_1", "col_2","col_3"]] ##Subset data frames using a list of column names
+
+df["col"] ->Some logical condition: can be integers, dates, or strings
+df[condition_1 & condition_2] ##Subsetting conditions can be done with multiple operators
+
+df["column"].isin(["list_of_values"]) ##Subsetting using multiple strings
+'''
+
+'''
+Summary Statistics
+
+
+df[column_name].unique() ##List of unique values in the column
+df[column_name].mean() ##.median(),.mode(),.min(),.max(),.var(),.std(), .sum()
+
+The .agg() method ##Useful for user defined columns to pass on columns. Also allow for multiple functions
+The .agg() method allows you to apply your own custom functions to a DataFrame, as well as apply functions to more than one column of a DataFrame at once, making your aggregations super-efficient (pass a list of column names)
+
+df[list_of_columns].agg(list_of_functions)
+
+df[column_name].cumsum() ##column sum. Also allows for.cummax(),.cummin(), .cumprod()
+
+'''
+
+'''
+Counting
+
+df.drop_duplicates(subset = ["list_of_columns"]) ##This will drop duplicates based on "column"
+
+df['column'].value_counts() ##Count unique values based on column
+df['column'].value_counts(sort = True) ##Count and sort
+df['column'].value_counts(normalize = True) ##Changes to proportions	
+
+
+'''
+
+'''
+Grouped summary statistics
+
+df.groupby("grouping_variable")["list_of_variables_to_calculate	"].mean()
+df.groupby(["grouping_variable_list"])[["list_of_variables_to_calculate"]].agg([list_of_functions])
+'''
+
+'''
+Pivot tables
+
+-Single variable pivoting
+df.pivot_table(values = "variable_to_summarize",index = "variable_with_groups") ##mean is default
+df.pivot_table(values = "variable_to_summarize",index = "variable_with_groups",aggfunc = [list_of_function_to_summarize])
+
+-Pivot on two variables
+df.pivot_table(values = "variable_to_summarize",index = "variable_with_groups",columns = 'second_variable',fill_value = 0)
+df.pivot_table(values = "variable_to_summarize",index = "variable_with_groups",columns = 'second_variable',fill_value = 0,
+margins = True)
+
+'''
+
+'''
+Explicit indexes
+
+df.columns -> arrary of column names
+df.index -> array of row numbers
+
+df = df.set_index("variable that will become new row names")
+df = df.set_index(["list of variables that will become new row names"]) ##Multi-level or hierarchical indexing
+df.reset_index(drop = True) ##this will drop the index and the column
+
+Subsetting with a list of tuples:
+
+##Loc takes [] brackets
+df.loc[[(outer_level,inne_level), (outer_level, inner_level)]] ##This will return rows whose indices clear the outer and inner values
+obs: setting indices can be useful for using with df.loc
+	 indices don't need to be unique
+
+df.sort_index() #sorts indices
+df.sort_index(level =[integer_levels],ascending = [True, False])
+
+'''
+
+'''
+
+Recall from Chapter 1 that you can combine multiple Boolean conditions using logical operators, such as &. To do so in one line of code, you'll need to add parentheses () around each condition.
+
+
+.loc and .iloc
+
+Slicing the outer index level (after using set index): df.loc["value_1":"last_value"]
+
+Slicing inner index level: df.loc[(first_position, last_position):first_position, last_position)] ## As tuples
+
+Slicing columns: df.loc[:,list_of_columns]
+
+##df.loc[] can be used to slice rows and columns at the same time, just pass the right way to slice
+
+df.loc[] can also be used to subset dates
+
+df.loc[row_tuples_or_1:row_tuples_or_list_2,columns] ##The division between rows and columns is the comma
+
+-----------
+Subsetting by row and column number
+
+df.iloc[list_of_row_indices, list_of_column_indices]
+
+'''
+
+'''
+Working with pivot tables: subsetting and calculations
+
+Pivot tables are just data frames with sorted indices, which means that .loc and .iloc methods work
+
+df.mean(axis="index") ##how to calculate across columns in a pivot table
+df.mean(axis="columns")
+'''
+
+'''
+You can access the components of a date (year, month and day) using code of the form dataframe["column"].dt.component. For example, the month component is dataframe["column"].dt.month, and the year component is dataframe["column"].dt.year.
+
+mean_temp_by_year[mean_temp_by_year == mean_temp_by_year.max()] ##Cool example
+
+'''
+
+'''
+Visualizing your data
+
+import matplotlib.pyplot as plt
+
+df['column_name'].hist()
+plt.show
+
+
+df_with_indices.plot(kind = 'bar', title = 'some_title')
+df.plot(x = "time",y = "measurement", kind = "line",rot = xx)
+df.plot(x = "x_var", y = "y_var", kind = "scatter")
+plt.legend([list_of_legends])
+'''
+
+
+'''
+Missing values
+
+- NaN indicate a missing value
+
+- df.isna()
+- df.isna().any() ##Are there any missing values in the df
+- df.isna().sum() ##Total NAs by column
+- df.dropna() ##Drop rows with missing values
+- df.fillna(0) ##Value for replacing NAf
+'''
+
+'''
+Creating dataframes
+
+Dictionaries
+
+- From a list of dictionaries:
+* Data frame is constructed row by row
+* list of dicts = [dictionary_1, dictionary_2, ...]
+
+- From a dictionary of lists:
+* Data frame is constructed column by column
+
+* Each key will be a column name
+* Each value will be a list of column values
+
+dict_of_listts = {
+	"column_name" = ["value_1", "value_2"],
+	...
+}
+'''
+
+'''
+Reading and writing .csvs
+
+pd.read_csv("csv_name")
+data_frame_object.to_csv("new_title.csv")
+'''
+
+
+
+'''
+Code snippets
+
+##Double null filtering
+apps_with_size_and_rating_present = apps[(apps['Rating'].isnull() == False) &(apps['Size'].isnull() == False)]
+
+##Drop nas by columns
+merged_df.dropna(subset = ['Sentiment', 'Review'])
+

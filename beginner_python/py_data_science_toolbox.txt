@@ -1,0 +1,159 @@
+User defined functions
+
+Defining a function
+
+
+def square(value): #Function header: contains the arguments and the function title
+	new_value = value**2 #<- Function body
+	return new_value ##the return call does not necesarilly need parentheses to wrap
+
+Docstrings:
+
+Documentation piece commenting what the function does. Usually wrapped in three quotation marks
+after the function definition.	
+
+Returning values is generally more desirable than printing them out because, as you saw earlier, a print() call assigned to a variable has type NoneType
+
+##Obs: remember "+" and "*" operators in Python and how they interact with strings and lists
+
+Multiple parameters and return values:
+
+- accept more than one parameter (separated by commas)
+
+def raise_to_power(value1, value2):
+	"""Raise value1 to the power of value2."""
+	new_value = value1**value2
+
+	return new_value
+
+Returning multiple values: tuples
+
+Tuples:
+	* Like a list: can contain multiple values
+	* Immutable: can't modify values
+	* Constructed using parentheses	
+	* Can be indexed like lists
+
+Tuples can be unpacked
+even_nums = (2,4,6)
+a,b,c = even_nums ##This will create three variables, each with the corresponding value of the tuples
+
+def raise_both(value1, value2):
+	
+	"""Raise value1 to the power of value2 and vice_versa"""
+	new_value1 = value1**value2
+	new_value2 = value2**value1
+
+	new_tuple = (new_value1, new_value2)
+
+	return new_tuple
+
+
+Scope and user-defined functions
+
+- Scope: part of a program where an object or name may be accessible
+	* Global scope: defined in the main body of a script
+	* Local scope: defined within a function
+	* Built-in scope: names in the  pre-defined built-ins module
+
+
+When a command is run, the program looks locally first and then globally for the variable	
+
+- Changing the value of a global variable using a function
+
+new_val = 10
+
+def square(value):
+	'''Function does something'''
+
+	global new_val
+	new_val = new_val**2
+	return new_val
+
+# Another way to change the value of a global variable from a function
+
+#Create a string: team
+team = "teen titans"
+
+# Define change_team()
+def change_team():
+    """Change the value of the global variable team."""
+
+    # Use team in global scope
+    global team    
+
+    # Change the value of team in global: team
+    team = 'justice league'
+
+--Nested functions
+
+* It is possible to return functions
+* Scopes searched by a function (in order):
+	* Local scope: defined within a function
+	* Enclosing scope: defined within an "outer" function
+	* Global scope: defined in the main body of a script
+	* Built-in scope: names in the  pre-defined built-ins module
+
+Closure: This means that the nested or inner function remembers the state of its enclosing scope when called. Thus, anything defined locally in the enclosing scope is available to the inner function even when the outer function has finished execution.
+
+--Default and flexible arguments
+
+In the parameter of interest in the function, we specify a default value using "=" operator 
+
+def add_all(*args): This transforms all arguments passed into a tuple in the function body ##
+
+def print_all(*kwargs): keyword arguments ##Turns the identifiers into a dictionary in the function body
+
+print_all(name = 'Hugo Bowne-Anderson', employer = 'DataCamp') 
+
+
+--Lambda Functions
+
+raise_to_power = lambda x,y: x**y (Notice that thee arguments are separated by a comma, and the colon precedes the 'body')
+
+raise_to_power(2,3) ##You call the function with a tuple
+
+--Anonymous Function
+
+* Function map takes two arguments: map(function, sequence/list)
+* map applies the function to ALL elements in a sequence
+
+Ex:
+nums = [48,6,9,21,1]
+square_all = map(lambda num: num **2, nums) ##notice that lambda is the function, nums is the sequence/list
+
+* map() applies a function over an object, such as a list.  This returns a map object that can be transformed into a list
+
+* to transform a map object to list, call: list(map_object)
+
+* The best use case for lambda functions, however, are for when you want these simple functionalities to be anonymously embedded within larger expressions
+
+* The function filter() offers a way to filter out elements from a list that don't satisfy certain criteria.
+
+* filter() example: filter(lambda member: len(member)>6, fellowship). If the result of the lambda returns True, grab it from the list.
+
+* The reduce() function is useful for performing some computation on a list and, unlike map() and filter(), returns a single value as a result
+
+* Reduce example: 
+	# Import reduce from functools
+	from functools import reduce
+
+	# Create a list of strings: stark
+	stark = ['robb', 'sansa', 'arya', 'brandon', 'rickon']
+
+	# Use reduce() to apply a lambda function over stark: result
+	result = reduce(lambda item1,item2: item1 + item2, stark)
+
+-- Introduction to Error Handling
+
+Errors and exceptions:
+* Exceptions: caught during exception
+* Catch exceptions with try-clause
+* We can raise certain types of errors to control the flow of the program:
+	* raise ValueError()/raise TypeError/raise NameError
+	* raise is best used with an if statement:
+
+		if smth_is_true:
+			raise ValueError('some_error_message_here')
+
+* if col_name not in df.columns ##To check list membership			

@@ -1,0 +1,134 @@
+--Introduction to iterators
+
+* Iterable objects: lists, strings, dictionaries, file connections
+	* An object with an associated iter() method
+	* Applying iter() to an iterable object creates an iterator
+
+* Iterator:
+	* Iterator is an object that keeps state and produces the next value when you call next() on it.
+	* We can use: list(iterator) to convert to a list
+
+
+	example:
+
+	word = 'Data'
+	it = iter(word) ##now we can iterate over each letter		
+
+* Range() doesn't actually create a list; instead, it creates a range object with an iterator that produces the values until it reaches the limit (in the example, until the value 4)	
+	* Creating an iterator for range: iter(range(3))
+
+* enumerate():
+
+	- Takes an iterable object and returns an 'enumerate' object, which consists of pairs of the original iterable, along
+	with their index within the iterable
+
+	- list(enumerate_object)	will return a list of tuples
+
+	- for index, value in enumerate(object):
+		print(index, value) ##Index is the first element of the tuple and value is the second
+
+* zip()
+	
+	list_1 = []
+	list_2 = []
+
+	z = zip(list_1, list_2) ##Creates a 'zip' object which is an iterator of tuples	
+	z = list(z) ##this creates a list of tuples, where each tuple contains the nth element of each iterator (in order)	
+	z = dict(z) ##this creates a dictionary from the list if tuples
+
+	* When you zip, the total values will be the same as the length of each tuplee.
+	* You can unpack zip using the '*' operator. Ex: "*zip_object"
+	# 'Unzip' the tuples in z1 by unpacking with * and zip(): result1, result2 
+
+	result1, result2 = zip(*z1) ##This will unpack the first element into its own tuple. Same for the second
+
+
+* Using iterators to load large files into memory
+
+Example:
+
+for chunk in pd.read_csv("file_name.csv", chunksize = n):
+	do_something
+
+-- List Comprehension
+
+nums = [12,8,21,3,16]
+new_nums = [num + 1 for num in nums] ##Start with the computation, then pass the iteration variable
+
+* Can be used with any iterable object
+* Collapse for loops for building lists with a single line
+* Components:
+	* Iterable
+	* Iterator variable (represent members of the iterable)
+	* Output expression
+* Matrices can be represented as a list of lists in Python		
+*Create a 5 x 5 matrix using a list of lists: matrix
+   matrix = [[col for col in range(0,5)] for row in range(0,5)]
+
+-- Advanced Comprehensions
+
+* Conditionals in iterable (good for only using some elements of a list)
+[num**2 for num in range(10) if num % 2 == 0] ##Square if the number is even   
+
+* Conditionals on the output expression
+
+[num**2 if num %2 == 0 else 0 for num in range(10)]
+
+* Dictionary comprehensions
+
+	* Use curly braces instead of square brackets
+	* Key values are separated by a colon: 
+
+		pos_neg = {num:-num for num in range(9)}
+
+	# Create a list of strings: fellowship
+	fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gimli']
+
+	# Create dict comprehension: new_fellowship
+	new_fellowship = {member:len(member) for member in fellowship}
+
+	# Print the new dictionary
+	print(new_fellowship)
+
+-- Introduction to Generator Expressions
+
+* Generators are like list comprehensions, but they do not return a list. They return a generator objects.
+* Both can be iterated over
+* Generator functions:
+	- Produces generator objects when called
+	- Defined like a regular function - def some_function:
+	- Yields a sequence of values instead of returning a single value
+	- Generates a value with yield keyword
+	- Generator functions are functions that, like generator expressions, yield a series of values, instead of returning a single value.
+	- Useful for lazy evaluation
+
+------
+* zip() can be useful to create lists of tuples to organize data
+
+* We can also generate a data frame from a dictionary
+
+* Generators for the large data limit
+
+	- Use a generator to load a file line-by-line
+	- Works on streaming data
+	- Read and process the file until all lines are exhausted
+	-Generators allow users to lazily evaluate data. This concept of lazy evaluation is useful when you have to deal with very large datasets because it lets you generate values in an efficient manner by yielding only chunks of data at a time instead of the whole thing at once	
+
+	# Define read_large_file()
+	def read_large_file(file_object):
+    """A generator function to read a large file lazily."""
+
+    # Loop indefinitely until the end of the file
+    while True:
+
+        # Read a line from the file: data        
+        data = file_object.readline()
+        yield data    
+        # Break if this is the end of the file
+        if not data:
+            break
+
+        # Yield the line of data
+
+* [int(pops_list[i][0]*pops_list[i][1]*0.01) for i in range(len(pops_list))] ##looping through a list of tuples by index
+* [int(tup[0] * tup[1] * 0.01) for tup in pops_list] ##looping through a list of tuples: simpler       
